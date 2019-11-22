@@ -4,18 +4,24 @@
     <meta charset="utf-8">
     <title>TEST</title>
   </head>
-  <body>
+  <body style="margin: 0px;">
+    <div class="pippo">
     <a class="weatherwidget-io" href="https://forecast7.com/it/45d7812d84/portogruaro/"
     data-label_1="PORTOGRUARO" data-label_2="METEO" data-icons="Climacons Animated"
     data-mode="Current" data-days="3" data-theme="original" >PORTOGRUARO METEO</a>
+    </div>
 <script>
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id))
+{js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';
+fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
 </script>
 <style>
-  body{
+  .weatherwidget-io{
     margin: 0px;
     width:288px;
     height:144px;
+    padding:0px;
+    /* background-color: grey */
   }
 </style>
   </body>
