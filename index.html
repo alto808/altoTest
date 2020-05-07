@@ -1,12 +1,197 @@
+
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>testMacerata</title>
-  </head>
-  <body style="height: 384px; width: 640px; background-color: powderblue;">
-    <div>
-      <h1>macerata</h1>
+<html lang="it">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="/Content/css?v=NiK0m-ymEh8PXJK5PQp5gxKHyV7epTTM6luO4BwqXx01" rel="stylesheet"/>
+
+    <script src="/bundles/modernizr?v=qVODBytEBVVePTNtSFXgRX0NCEjh9U_Oj8ePaSiRcGg1"></script>
+
+    <script src="/bundles/jquery?v=M_visK3zGYdth3DDi_ZIdK-g0_e74rAnr_jV_wDv1x01"></script>
+
+    
+    <link rel="stylesheet" href="/Content/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/Scripts/flexslider/flexslider.css" type="text/css" />
+    <script type="text/javascript" src="/Scripts/flexslider/jquery.flexslider.js"></script>
+    <link rel="stylesheet" href="/Scripts/datatables/jquery.dataTables.css" type="text/css" />
+    <script type="text/javascript" src="/Scripts/datatables/jquery.dataTables.min.js"></script>
+    <link href="/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="/Scripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="/Scripts/colpick/colpick.js"></script>
+    <script src="/Scripts/fileupload/FileUpload.js"></script>
+    <script type="text/javascript" src="/Scripts/custom.js"></script>
+    
+    <link rel="stylesheet" href="/Content/magnific-popup.css">
+    <script src="/Scripts/jquery.magnific-popup.js"></script>
+    <script src="/Scripts/fileupload/FileUpload.js"></script>
+    <link rel="stylesheet" href="/Content/nanoscroller.css">
+    <script src="/Scripts/jquery.nanoscroller.js"></script>
+    <script src="/Scripts/simple-expand.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.5.1/full/ckeditor.js"></script>
+    <link rel="stylesheet" href="/Content/webticker.css">
+    <script src="/Scripts/jquery.webticker.js"></script>
+</head>
+<body id="body">
+    <div id="page_content">
+        
+<div id="template-container" style="background-color:#808080; ">
+    <table class="homeTable" cellpadding="10" style="border-spacing:2px;">
+        <tr style="height:60%">
+            <td colspan="3" style="border:1px; border-color:yellow">
+                <table style="width:100%">
+                    <tr>
+                        <td style="font-size:16px; color:white; font-weight:bold;">
+                            <span>Partenze</span>
+                            <div class="datagrid">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Linea</th>
+                                            <th>Destinazione</th>
+                                            <th>Orario</th>
+                                            <th>Stallo</th>
+                                            <th>Ritardo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody"></tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+<link href="/Content/Horizontal.css" rel="stylesheet">
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        AggiornaTabellaOrari();
+        $("#bgDefaulColor").val("#808080");
+        $('.flexsliderHome').flexslider({
+            animation: "slide",
+            controlNav: false,
+            directionNav: false
+        });
+        $('#body').width(640);
+        $('#body').height(384);
+    });
+
+    $('#webticker').webTicker({
+        speed: 50, //pixels per second
+        direction: "left", //if to move left or right
+        moving: true, //weather to start the ticker in a moving or static position
+        startEmpty: false, //weather to start with an empty or pre-filled ticker
+        duplicate: true, //if there is less items then visible on the ticker you can duplicate the items to make it continuous
+        rssurl: false, //only set if you want to get data from rss
+        rssfrequency: 0, //the frequency of updates in minutes. 0 means do not refresh
+        updatetype: "reset" //how the update would occur options are "reset" or "swap"
+    });
+
+    setInterval(AggiornaTabellaOrari, 60000);
+
+    setInterval(function () {
+        location.reload();
+    }, 3600000);
+
+    function AggiornaTabellaOrari() {
+        $.ajax({
+            url: '/Home/TabellaOrari?codiceNodo=606&intranetId=40',
+            cache: false,
+            timeout: 10000,
+            success: function (data) {
+                $('#tbody').contents().remove();
+                if (data != null) {
+                    for (var i in data) {
+                        //if (i > 11)
+                        //    break;
+                        if (i % 2 == 0) {
+                            $('#tbody').append('<tr><td>' + data[i].Linea + '</td><td>' + data[i].Destinazione + '</td><td style="text-align:center">' + data[i].Orario + '</td><td style="text-align:center">' + data[i].Stallo + '</td><td style="text-align:center">' + data[i].Ritardo + '</td></tr>');
+                        }
+                        else {
+                            $('#tbody').append('<tr class="alt"><td>' + data[i].Linea + '</td><td>' + data[i].Destinazione + '</td><td style="text-align:center">' + data[i].Orario + '</td><td style="text-align:center">' + data[i].Stallo + '</td><td style="text-align:center">' + data[i].Ritardo + '</td></tr>');
+                        }
+                    }
+                }
+            },
+            error: function (req, status, errorObj) {
+                $('#tbody').contents().remove();
+                $('#tbody').append('<tr><td>Servizio momentaneamente non disponibile</td></tr>');
+            }
+        });
+    }
+</script>
+
+<style>
+    .datagrid table {
+        border-collapse: collapse;
+        text-align: left;
+        width: 100%;
+    }
+
+    .datagrid {
+        font: normal 12px/150% Arial, Helvetica, sans-serif;
+        background: #fff;
+        overflow: hidden;
+    }
+
+        .datagrid table thead th {
+            background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+            background: -moz-linear-gradient( center top, #006699 5%, #00557F 100% );
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');
+            background-color: #006699;
+            color: #FFFFFF;
+            font-weight: bold;
+            border-left: 0px solid #0070A8;
+            font-size: 16px;
+            padding: 2px;
+        }
+
+            .datagrid table thead th:first-child {
+                border: none;
+            }
+
+        .datagrid table tbody td {
+            color: #00496B;
+            font-weight: normal;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 2px;
+        }
+
+        .datagrid table tbody .alt td {
+            background: #E1EEF4;
+            color: #00496B;
+        }
+
+        .datagrid table tbody td:first-child {
+            border-left: none;
+        }
+
+        .datagrid table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    table th {
+        border: none;
+    }
+</style>
     </div>
-  </body>
+    <div id="animationFull" style="display: none; width: 100%; height: 100%; position: absolute;">
+    </div>
+    <input type="hidden" id="bgDefaulColor" value="" />
+</body>
 </html>
+<!-- cookiechoices.org -->
+<script src="/Scripts/cookiechoices.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function (event) {
+        cookieChoices.showCookieConsentBar('Questo sito fa uso di cookies. Continuando la navigazione se ne autorizza l\'uso.', 'OK', 'Più info', '/home/about');
+    });
+</script>
